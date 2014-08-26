@@ -1,4 +1,4 @@
-package com.example.flashlight;
+																																										package com.example.flashlight;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -77,21 +77,7 @@ public class MainActivity extends Activity {
     	camera.startPreview();
     }
     private void turnOnStrobe(){
-    	final Runnable mRunnable = new Runnable() {
-
-            public void run() {         
-                if (strobeOn) {
-                    turnOnTorch();
-                    try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-                    turnOff();
-                }           
-            }
-        };
+    	
     }
     private void turnOff(){
     	params = camera.getParameters();
