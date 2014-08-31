@@ -1,4 +1,4 @@
-																																										package com.example.flashlight;
+package com.example.flashlight;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,23 +14,17 @@ import android.util.*;
 
 
 public class MainActivity extends Activity {
-	private Camera camera;
 	private boolean hasFlash;
 	private Button btn_switch;
-    private Parameters params;
     
-    private boolean strobeOn;
+    private FlashlightThread ft;
+    private Thread flashlight;
     
-    private Handler strobeHandler = new Handler();
     
-	
-	private int counter = 0;
-	
-		
-    @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btn_switch = (Button) findViewById(R.id.btn_switch);
         hasFlash = getApplicationContext().getPackageManager()
@@ -52,11 +46,73 @@ public class MainActivity extends Activity {
             alert.show();
             return;
         }
+        ft = new FlashlightThread();
+        flashlight = new Thread(ft);
+        flashlight.start();
+        
+    	btn_switch.setOnClickListener(new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			handleAction();
+		}
+	});
+	}
+	
+	private void handleAction(){
+		if(!ft.strobeOn){
+			ft.strobeOn = true;
+			btn_switch.setText("On");
+		}
+		else{
+			ft.strobeOn = false;
+			btn_switch.setText("Off");
+		}
+	}
+	
+}
+	/*private Camera camera;
+	private boolean hasFlash;
+	private Button btn_switch;
+    private Parameters params;
+    
+    private boolean strobeOn;
+    
+    private Handler handler = new Handler();
+    
+	
+	private int counter = 0;
+	
+		
+    @SuppressWarnings("deprecation")
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        btn_switch = (Button) findViewById(R.id.btn_switch);
+        hasFlash = getApplicationContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+         
+        if (!hasFlash) {
+            // device doesn't support flash
+            // Show alert message and close the application
+            AlertDialog alert = new AlertDialog.Builder(FlashlightActivity.this)
+                    .create();
+            alert.setTitle("Error");
+            alert.setMessage("Sorry, your device doesn't support the Flashlight! App!");
+            alert.setButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // closing the application
+                    finish();
+                }
+            });
+            alert.show();
+            return;
+        }
         btn_switch.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				action();
+				handleAction();
 			}
 		});
     }
@@ -85,7 +141,7 @@ public class MainActivity extends Activity {
     	camera.setParameters(params);
     	camera.startPreview();
     }
-    private void action(){
+    private void handleAction(){
     	switch(counter){
     		case 0:
     			strobeOn = false;
@@ -152,4 +208,4 @@ public class MainActivity extends Activity {
             camera = null;
         }
     }
-}
+}*/
