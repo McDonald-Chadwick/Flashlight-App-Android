@@ -20,6 +20,8 @@ public class MainActivity extends Activity {
     private FlashlightThread ft;
     private Thread flashlight;
     
+    private int counter = 0;
+    
     
 	@SuppressWarnings("deprecation")
 	@Override
@@ -59,13 +61,28 @@ public class MainActivity extends Activity {
 	}
 	
 	private void handleAction(){
-		if(!ft.strobeOn){
-			ft.strobeOn = true;
-			btn_switch.setText("On");
-		}
-		else{
-			ft.strobeOn = false;
-			btn_switch.setText("Off");
+		switch(counter){
+			case 0:
+				ft.strobeOn = false;
+				ft.off = true;
+				ft.torchOn = false;
+				counter++;
+				btn_switch.setText("Off");
+				break;
+			case 1:
+				ft.strobeOn = false;
+				ft.off = false;
+				ft.torchOn = true;
+				counter++;
+				btn_switch.setText("On");
+				break;
+			case 2:
+				ft.strobeOn = true;
+				ft.off = false;
+				ft.torchOn = false;				
+				counter = 0;
+				btn_switch.setText("Strobe");
+				break;
 		}
 	}
 	

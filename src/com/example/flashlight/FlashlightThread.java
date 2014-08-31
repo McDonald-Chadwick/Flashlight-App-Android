@@ -9,13 +9,16 @@ public class FlashlightThread implements Runnable{
 	private Camera camera;
 	private Parameters params;
 	protected boolean strobeOn = false;
+	protected boolean torchOn = false;
+	protected boolean off = true;
+
 	
 	public FlashlightThread(){
 		getCamera();
 	}
 	public void run(){
 		while(true){
-			if(strobeOn){
+			if(strobeOn && !torchOn && !off){
 				params = camera.getParameters();
 		    	params.setFlashMode(Parameters.FLASH_MODE_TORCH);
 		    	camera.setParameters(params);
@@ -28,6 +31,18 @@ public class FlashlightThread implements Runnable{
 				}
 		    	
 		    	params = camera.getParameters();
+		    	params.setFlashMode(Parameters.FLASH_MODE_OFF);
+		    	camera.setParameters(params);
+		    	camera.startPreview();
+			}
+			else if(torchOn && !strobeOn && !off){
+				params = camera.getParameters();
+		    	params.setFlashMode(Parameters.FLASH_MODE_TORCH);
+		    	camera.setParameters(params);
+		    	camera.startPreview();
+			}
+			else{
+				params = camera.getParameters();
 		    	params.setFlashMode(Parameters.FLASH_MODE_OFF);
 		    	camera.setParameters(params);
 		    	camera.startPreview();
